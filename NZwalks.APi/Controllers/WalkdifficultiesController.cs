@@ -45,6 +45,12 @@ namespace NZwalks.APi.Controllers
 
         public async Task<IActionResult> AddWDAsync(AddWDReq addWDReq)
         {
+            //validate data
+            if(!ValidateAddWDAsync(addWDReq))
+            {
+                return BadRequest(ModelState);
+            }
+
             //convert dto to domain
             var wddomain = new Models.Domain.WalkDifficulty()
             {
@@ -63,6 +69,11 @@ namespace NZwalks.APi.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateWD(Guid id, UPdWDReq uPdWDReq)
         {
+            //validate data
+            if (!ValidateUpdateWD(uPdWDReq))
+            {
+                return BadRequest(ModelState);
+            }
             //convert dto domain
             var wddomain = new Models.Domain.WalkDifficulty
             {
@@ -71,7 +82,7 @@ namespace NZwalks.APi.Controllers
             //call repo to update
             wddomain = await walkdifficulty.UpdwdASync(id, wddomain);
 
-            if(wddomain==null) { return NotFound(); }
+            if (wddomain == null) { return NotFound(); }
             //convert to DTO
             var WDDTO = mapper.Map<Models.DTO.WalkDifficulty>(wddomain);
             return Ok(WDDTO);
@@ -82,13 +93,54 @@ namespace NZwalks.APi.Controllers
 
         public async Task<IActionResult> WdDelAsync(Guid id)
         {
-         var Wddomain=  await walkdifficulty.DelAsync(id);
-           if(Wddomain == null) {
+            var Wddomain = await walkdifficulty.DelAsync(id);
+            if (Wddomain == null)
+            {
                 return NotFound();
 
             }
             var WDDTO = mapper.Map<Models.DTO.WalkDifficulty>(Wddomain);
             return Ok(WDDTO);
         }
+
+        #region Private methods
+        private bool ValidateAddWDAsync(AddWDReq addWDReq)
+        {
+            if (addWDReq == null)
+            {
+                ModelState.AddModelError(nameof(addWDReq), $"{nameof(addWDReq)} can't be empty");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(addWDReq.Code))
+            {
+                ModelState.AddModelError(nameof(addWDReq), $"{nameof(addWDReq)} is reqd");
+            }
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+            return true;
+           
+        }
+        private bool ValidateUpdateWD(UPdWDReq uPdWDReq)
+        {
+            if (uPdWDReq == null)
+            {
+                ModelState.AddModelError(nameof(uPdWDReq), $"{nameof(uPdWDReq)} can't be empty");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(uPdWDReq.Code))
+            {
+                ModelState.AddModelError(nameof(uPdWDReq), $"{nameof(uPdWDReq)} is reqd");
+            }
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        #endregion
     }
 }

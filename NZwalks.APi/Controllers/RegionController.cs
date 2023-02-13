@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NZwalks.APi.Models.Domain;
 using NZwalks.APi.Models.DTO;
 using NZwalks.APi.Repository;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 
 namespace NZwalks.APi.Controllers
@@ -77,8 +78,18 @@ namespace NZwalks.APi.Controllers
         }
 
         [HttpPost]
+
+
         public async Task<IActionResult> AddRegAsync(Models.DTO.AddRegReq addRegReq)
         {
+            //validate the req
+
+            if (!ValidateAddRegAsync(addRegReq))
+            {
+                return BadRequest(ModelState);
+            }
+
+
             //Req (DTO) to Domain model
             var region = new Models.Domain.Region()
             {
@@ -144,7 +155,11 @@ namespace NZwalks.APi.Controllers
 
         public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id, [FromBody] UpdateRegReq updateRegReq)
 
-        {
+        { //validate req
+            if(!ValidateUpdateRegionAsync(updateRegReq))
+            {
+                return BadRequest(ModelState);
+            }
             //Convert DTO to domain model
 
             var updregion = new Models.Domain.Region()
@@ -182,5 +197,86 @@ namespace NZwalks.APi.Controllers
             return Ok(regionDTO);
 
         }
+
+        #region Private Methods
+        private bool ValidateAddRegAsync(AddRegReq addRegReq)
+        {
+            if (addRegReq == null)
+            {
+                ModelState.AddModelError(nameof(addRegReq), "$ Reg req data required");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(addRegReq.Code))
+            {
+                ModelState.AddModelError(nameof(addRegReq.Code), $"{nameof(addRegReq.Code)} cannot be null or whitespace or empty");
+            }
+            if (string.IsNullOrWhiteSpace(addRegReq.Name))
+            {
+                ModelState.AddModelError(nameof(addRegReq.Name), $"{nameof(addRegReq.Name)} cannot be null or whitespace or empty");
+            }
+            if (addRegReq.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(addRegReq.Area), $"{nameof(addRegReq.Area)} cannot be less than or equal to zero");
+            }
+            if (addRegReq.Lat <= 0)
+            {
+                ModelState.AddModelError(nameof(addRegReq.Lat), $"{nameof(addRegReq.Lat)} cannot be less than or equal to zero");
+            }
+            if (addRegReq.Long <= 0)
+            {
+                ModelState.AddModelError(nameof(addRegReq.Long), $"{nameof(addRegReq.Long)} cannot be less than or equal to zero");
+            }
+            if (addRegReq.Population < 0)
+            {
+                ModelState.AddModelError(nameof(addRegReq.Population), $"{nameof(addRegReq.Population)} cannot be less than or equal to zero");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool ValidateUpdateRegionAsync(UpdateRegReq updateRegReq)
+        {
+            if (updateRegReq == null)
+            {
+                ModelState.AddModelError(nameof(updateRegReq), "$ Reg req data required");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(updateRegReq.Code))
+            {
+                ModelState.AddModelError(nameof(updateRegReq.Code), $"{nameof(updateRegReq.Code)} cannot be null or whitespace or empty");
+            }
+            if (string.IsNullOrWhiteSpace(updateRegReq.Name))
+            {
+                ModelState.AddModelError(nameof(updateRegReq.Name), $"{nameof(updateRegReq.Name)} cannot be null or whitespace or empty");
+            }
+            if (updateRegReq.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(updateRegReq.Area), $"{nameof(updateRegReq.Area)} cannot be less than or equal to zero");
+            }       
+            if (updateRegReq.Population< 0)
+            {
+                ModelState.AddModelError(nameof(updateRegReq.Population), $"{nameof(updateRegReq.Population)} cannot be less than or equal to zero");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+  
+
+        #endregion
+
+
     }
+
+
+
 }
