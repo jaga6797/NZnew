@@ -136,20 +136,20 @@ namespace NZwalks.APi.Controllers
         #region Private methods
         private async Task<bool> ValidateAddWAsync(Models.DTO.AddWalkReq addWalkReq)
         {
-            if (addWalkReq == null)
-            {
-                ModelState.AddModelError(nameof(addWalkReq), $"{nameof(addWalkReq)} can't be empty");
-                return false;
-            }
-            if (String.IsNullOrWhiteSpace(addWalkReq.Name))
-            {
-                ModelState.AddModelError(nameof(addWalkReq.Name), $"{nameof(addWalkReq.Name)} is reqd");
+            //if (addWalkReq == null)
+            //{
+            //    ModelState.AddModelError(nameof(addWalkReq), $"{nameof(addWalkReq)} can't be empty");
+            //    return false;
+            //}
+            //if (String.IsNullOrWhiteSpace(addWalkReq.Name))
+            //{
+            //    ModelState.AddModelError(nameof(addWalkReq.Name), $"{nameof(addWalkReq.Name)} is reqd");
 
-            }
-            if (addWalkReq.Length <= 0)
-            {
-                ModelState.AddModelError(nameof(addWalkReq.Length), $"{nameof(addWalkReq.Length)} can't be less than zero");
-            }
+            //}
+            //if (addWalkReq.Length <= 0)
+            //{
+            //    ModelState.AddModelError(nameof(addWalkReq.Length), $"{nameof(addWalkReq.Length)} can't be less than zero");
+            //}
 
             var region = await regionRepo.GetRegAsync(addWalkReq.RegionId);
             if (region == null)

@@ -46,10 +46,10 @@ namespace NZwalks.APi.Controllers
         public async Task<IActionResult> AddWDAsync(AddWDReq addWDReq)
         {
             //validate data
-            if(!ValidateAddWDAsync(addWDReq))
-            {
-                return BadRequest(ModelState);
-            }
+            //if(!ValidateAddWDAsync(addWDReq))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             //convert dto to domain
             var wddomain = new Models.Domain.WalkDifficulty()
@@ -69,11 +69,11 @@ namespace NZwalks.APi.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateWD(Guid id, UPdWDReq uPdWDReq)
         {
-            //validate data
-            if (!ValidateUpdateWD(uPdWDReq))
-            {
-                return BadRequest(ModelState);
-            }
+          //  validate data
+            //if (!ValidateUpdateWD(uPdWDReq))
+            //{
+            //    return BadRequest(ModelState);
+            //}
             //convert dto domain
             var wddomain = new Models.Domain.WalkDifficulty
             {
