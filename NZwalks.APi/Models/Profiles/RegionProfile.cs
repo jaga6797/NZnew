@@ -12,3 +12,4 @@ namespace NZwalks.APi.Models.Profiles
         }
     }
 }
+    

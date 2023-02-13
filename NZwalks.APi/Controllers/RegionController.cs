@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 
 namespace NZwalks.APi.Controllers
 {
-    [ApiController]  
-    [Route("controller")]
-    // or [Route("Regions")]
+    [ApiController]
+    [Route("[controller]")]
+    // or [Route("Region")]
     public class RegionController : Controller
     {
         private readonly IRegionRepo regrep;
@@ -58,7 +58,7 @@ namespace NZwalks.APi.Controllers
 
             //same using mapper we can return DTO regions
             var regDTO = mapper.Map<List<Models.DTO.Region>>(reg);
-            
+
             return Ok(regDTO);
         }
 
@@ -67,17 +67,17 @@ namespace NZwalks.APi.Controllers
         [ActionName("GetRegionAsync")]
         public async Task<IActionResult> GetRegionAsync(Guid id)
         {
-         var region=  await regrep.GetRegAsync(id);
-            if(region == null)
+            var region = await regrep.GetRegAsync(id);
+            if (region == null)
             {
                 return NotFound();
             };
-          var regionDTO=  mapper.Map<Models.DTO.Region>(region);
+            var regionDTO = mapper.Map<Models.DTO.Region>(region);
             return Ok(regionDTO);
         }
 
         [HttpPost]
-        public  async Task<IActionResult> AddRegAsync(Models.DTO.AddRegReq addRegReq)
+        public async Task<IActionResult> AddRegAsync(Models.DTO.AddRegReq addRegReq)
         {
             //Req (DTO) to Domain model
             var region = new Models.Domain.Region()
@@ -91,12 +91,13 @@ namespace NZwalks.APi.Controllers
             };
             //Pass details to repository
 
-             region= await regrep.AddAsync(region);
+            region = await regrep.AddAsync(region);
 
             //Convert back to DTO
 
             var regionDTO = new Models.DTO.Region()
             {
+                Id = region.Id,
                 Code = region.Code,
                 Name = region.Name,
                 Area = region.Area,
@@ -105,7 +106,7 @@ namespace NZwalks.APi.Controllers
                 Population = region.Population,
             };
 
-            return CreatedAtAction(nameof(GetRegionAsync), new {id = regionDTO .Id}, regionDTO);
+            return CreatedAtAction(nameof(GetRegionAsync), new { id = regionDTO.Id }, regionDTO);
         }
 
         [HttpDelete]
@@ -114,10 +115,10 @@ namespace NZwalks.APi.Controllers
         public async Task<IActionResult> DeleteRegAsync(Guid id)
         {
             //Get region from db
-           var delRegion = await regrep.DelRegAsync(id);
+            var delRegion = await regrep.DelRegAsync(id);
 
             //if no reg found, not found respone
-            if(delRegion == null)
+            if (delRegion == null)
             {
                 return NotFound();
             }
@@ -140,8 +141,8 @@ namespace NZwalks.APi.Controllers
         }
         [HttpPut]
         [Route("{id:guid}")]
-        
-        public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid id , [FromBody] UpdateRegReq updateRegReq)
+
+        public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id, [FromBody] UpdateRegReq updateRegReq)
 
         {
             //Convert DTO to domain model
@@ -157,7 +158,7 @@ namespace NZwalks.APi.Controllers
             };
 
             //update region using repository
-            updregion= await regrep.UpdateAsync(id, updregion);
+            updregion = await regrep.UpdateAsync(id, updregion);
             //if null  return not found
             if (updregion == null)
             {
@@ -167,6 +168,7 @@ namespace NZwalks.APi.Controllers
             //if not null, convert to DTO var regionDTO = new Models.DTO.Region
             var regionDTO = new Models.DTO.Region
             {
+                Id = updregion.Id,
                 Code = updregion.Code,
                 Name = updregion.Name,
                 Area = updregion.Area,
