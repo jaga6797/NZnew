@@ -7,19 +7,19 @@ namespace NZwalks.APi.Repository
 
         private List<User> Users = new List<User>()
      {
-        new User()
-        {
-            Fname= "Read only " , Lname= "User1", EmailAddress="readonly@user.com"
-            ,Id= Guid.NewGuid(),Username="readonly@user.com",Password="Read@user",
-            Roles =new List<string>{"reader"}
-        },
+        //new User()
+        //{
+        //    Fname= "Read only " , Lname= "User1", EmailAddress="readonly@user.com"
+        //    ,Id= Guid.NewGuid(),Username="readonly@user.com",Password="Read@user",
+        //    Roles =new List<string>{"reader"}
+        //},
 
-        new User()
-        {
-            Fname= "Read write" , Lname= "User", EmailAddress="readwrite@user.com"
-            ,Id= Guid.NewGuid(),Username="readwrite@user.com",Password="Write@user",
-            Roles =new List<string>{"reader","writer"}
-        }
+        //new User()
+        //{
+        //    Fname= "Read write" , Lname= "User", EmailAddress="readwrite@user.com"
+        //    ,Id= Guid.NewGuid(),Username="readwrite@user.com",Password="Write@user",
+        //    Roles =new List<string>{"reader","writer"}
+        //}
     };
         public async Task<User> AuthenticateUserAsync(string Username, string Password)
         {

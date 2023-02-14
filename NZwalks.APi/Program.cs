@@ -46,7 +46,7 @@ builder.Services.AddScoped< IRegionRepo, RegionRepo>();
 builder.Services.AddScoped<IWalkRepo, WalkRepo>();
 builder.Services.AddScoped<Iwalkdifficulty, Walkdifficultyrepo>();
 builder.Services.AddScoped<Itokenhandler, NZwalks.APi.Repository.TokenHandler>();
-builder.Services.AddSingleton<IUserRepository,StaticUserRepository >();
+builder.Services.AddScoped<IUserRepository, DynamicUserRepository>();
 
 
 
