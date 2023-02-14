@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZwalks.APi.Models.DTO;
 using NZwalks.APi.Repository;
+using System.Data;
 
 namespace NZwalks.APi.Controllers
 {
@@ -18,6 +20,7 @@ namespace NZwalks.APi.Controllers
             this.mapper = mapper;
         }
         [HttpGet]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAllWd()
         {
 
@@ -30,6 +33,7 @@ namespace NZwalks.APi.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("GetIdAsync")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetIdAsync(Guid id)
         {
 
@@ -42,6 +46,7 @@ namespace NZwalks.APi.Controllers
             return Ok(wdDTO);
         }
         [HttpPost]
+        [Authorize(Roles = "writer")]
 
         public async Task<IActionResult> AddWDAsync(AddWDReq addWDReq)
         {
@@ -67,6 +72,7 @@ namespace NZwalks.APi.Controllers
         }
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateWD(Guid id, UPdWDReq uPdWDReq)
         {
           //  validate data
@@ -90,6 +96,7 @@ namespace NZwalks.APi.Controllers
         }
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "writer")]
 
         public async Task<IActionResult> WdDelAsync(Guid id)
         {
